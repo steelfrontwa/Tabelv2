@@ -1,0 +1,228 @@
+/* ============================================================
+   styles.css — стили приложения Мой Табель
+   ============================================================ */
+
+/* ── Сброс и базовые ─────────────────────────────────────── */
+* {
+  margin: 0; padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background-color: #0a0a0a;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #f0f0f0;
+}
+
+/* ── Контейнер ───────────────────────────────────────────── */
+.app-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px 16px 40px;
+}
+
+/* ── Шапка ───────────────────────────────────────────────── */
+.header { margin-bottom: 24px; text-align: center; }
+.app-title {
+  font-size: 28px; font-weight: 800;
+  letter-spacing: 2px; color: #f5a623; margin-bottom: 4px;
+}
+.app-sub { font-size: 12px; color: #888; letter-spacing: 1px; }
+
+/* ── Вкладки ─────────────────────────────────────────────── */
+.tabs {
+  display: flex; gap: 8px;
+  background: #141414; border-radius: 16px;
+  padding: 4px; margin-bottom: 20px;
+}
+.tab {
+  flex: 1; text-align: center; padding: 10px 0;
+  border-radius: 12px; font-weight: 600; font-size: 14px;
+  color: #888; cursor: pointer; transition: 0.2s;
+  user-select: none;
+}
+.tab.active { background: #f5a623; color: #000; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* ── Карточки ────────────────────────────────────────────── */
+.card {
+  background: #141414; border: 1px solid #2a2a2a;
+  border-radius: 16px; padding: 18px; margin-bottom: 20px;
+}
+.section-title {
+  font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: #888; margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.section-title::after { content: ''; flex: 1; height: 1px; background: #2a2a2a; }
+
+/* ── Формы ───────────────────────────────────────────────── */
+.field-group { margin-bottom: 14px; }
+.field-label {
+  font-size: 10px; font-weight: 600; letter-spacing: 1px;
+  color: #aaa; margin-bottom: 5px; display: block;
+}
+.field-input, .field-textarea {
+  width: 100%; background: #1e1e1e;
+  border: 1px solid #2a2a2a; border-radius: 10px;
+  padding: 12px 14px; color: #f0f0f0;
+  font-size: 15px; font-family: inherit;
+  outline: none; -webkit-appearance: none;
+  transition: border-color 0.15s;
+}
+.field-input:focus, .field-textarea:focus { border-color: #f5a623; }
+.field-input::placeholder, .field-textarea::placeholder { color: #555; }
+.field-textarea { min-height: 130px; resize: vertical; line-height: 1.6; }
+.row-3 { display: flex; gap: 12px; flex-wrap: wrap; }
+.row-3 .field-group { flex: 1; min-width: 100px; }
+
+/* ── Кнопки ──────────────────────────────────────────────── */
+.btn {
+  background: #f5a623; border: none; border-radius: 12px;
+  padding: 14px; font-weight: 700; font-size: 16px;
+  letter-spacing: 1px; color: #000; width: 100%;
+  cursor: pointer; margin-top: 10px; transition: opacity 0.15s;
+}
+.btn:active { opacity: 0.8; }
+.btn-outline {
+  background: #1e1e1e; border: 1px solid #2a2a2a;
+  color: #f5a623;
+}
+.btn-green { background: #25D366; color: #fff; }
+.btn-small {
+  background: #1e1e1e; border: 1px solid #2a2a2a;
+  color: #aaa; padding: 10px 16px; border-radius: 10px;
+  font-size: 12px; cursor: pointer; white-space: nowrap;
+  transition: all 0.15s;
+}
+.btn-small:hover { border-color: #f5a623; color: #f5a623; }
+.btn-small.danger:hover { border-color: #e74c3c; color: #e74c3c; }
+.btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+
+/* ── Таблица ─────────────────────────────────────────────── */
+.table-wrapper {
+  overflow-x: auto; border-radius: 12px;
+  border: 1px solid #2a2a2a;
+  -webkit-overflow-scrolling: touch;
+}
+table { width: 100%; border-collapse: collapse; min-width: 780px; font-size: 12px; }
+th {
+  background: #1e1e1e; padding: 10px 8px; text-align: left;
+  font-size: 9px; font-weight: 600; letter-spacing: 1px;
+  color: #888; border-bottom: 1px solid #2a2a2a; white-space: nowrap;
+}
+td { padding: 8px; border-bottom: 1px solid #2a2a2a; vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(245,166,35,0.03); }
+
+.c-date  { font-size: 11px; font-weight: 500; white-space: nowrap; color: #aaa; }
+.c-machine { font-weight: 600; color: #f5a623; white-space: nowrap; }
+.c-type  { font-size: 10px; color: #888; }
+.c-addr  { max-width: 170px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.c-cargo { color: #3498db; font-size: 12px; }
+.c-client{ color: #aaa; font-size: 12px; font-style: italic; }
+.c-order { font-size: 12px; color: #e67e22; text-align: center; }
+
+.c-num input {
+  width: 52px; background: #1e1e1e; border: 1px solid #2a2a2a;
+  border-radius: 6px; padding: 5px; color: white;
+  text-align: center; font-size: 12px; outline: none;
+}
+.c-pay input {
+  width: 90px; background: #1e1e1e; border: 1px solid #2a2a2a;
+  border-radius: 6px; padding: 5px 6px; color: #2ecc71;
+  font-weight: 600; text-align: right; font-size: 12px; outline: none;
+}
+.c-num input:focus, .c-pay input:focus { border-color: #f5a623; }
+.c-del button {
+  background: none; border: none; color: #555;
+  font-size: 16px; cursor: pointer; padding: 0 6px;
+}
+.c-del button:hover { color: #e74c3c; }
+
+.empty-state {
+  text-align: center; padding: 40px 20px;
+  color: #555; font-size: 13px; letter-spacing: 0.5px;
+}
+
+/* ── Бейджи машин ────────────────────────────────────────── */
+.badge {
+  display: inline-block; padding: 2px 8px;
+  border-radius: 20px; font-size: 10px; font-weight: 600;
+}
+.badge-mini { background: rgba(52,152,219,0.2);  color: #3498db; }
+.badge-evak { background: rgba(245,166,35,0.2);  color: #f5a623; }
+.badge-dump { background: rgba(46,204,113,0.2);  color: #2ecc71; }
+
+/* ── Добавить строку вручную ─────────────────────────────── */
+.add-inputs {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px;
+}
+.add-inputs .field-input { flex: 1; min-width: 70px; padding: 10px 12px; }
+
+/* ── Итоги ───────────────────────────────────────────────── */
+.total-card {
+  background: #141414; border: 1px solid #2a2a2a;
+  border-radius: 16px; padding: 16px;
+}
+.total-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 0; border-bottom: 1px solid #2a2a2a;
+}
+.total-row:last-child { border-bottom: none; }
+.total-label { font-size: 13px; color: #aaa; }
+.total-value { font-weight: 700; font-size: 15px; }
+.total-value.green  { color: #2ecc71; }
+.total-value.orange { color: #f5a623; }
+.total-input {
+  width: 130px; background: #1e1e1e; border: 1px solid #2a2a2a;
+  border-radius: 8px; padding: 7px 10px; color: white;
+  text-align: right; font-size: 14px; outline: none;
+  font-weight: 600; -webkit-appearance: none;
+}
+.total-input:focus { border-color: #f5a623; }
+.hand-value { font-size: 26px; font-weight: 800; }
+.baza-hint  { font-size: 10px; color: #888; margin-left: 8px; }
+
+/* ── Авторизация ─────────────────────────────────────────── */
+.auth-modal {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.92); backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 10000;
+}
+.auth-card {
+  background: #1e1e1e; padding: 32px 28px;
+  border-radius: 24px; width: 300px; text-align: center;
+  border: 1px solid #f5a623;
+}
+.auth-title  { color: #f5a623; font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+.auth-sub    { color: #888; font-size: 12px; margin-bottom: 20px; }
+.auth-input  {
+  width: 100%; padding: 13px; background: #0a0a0a;
+  border: 1px solid #2a2a2a; border-radius: 12px;
+  color: white; font-size: 16px; margin-bottom: 14px;
+  outline: none; text-align: center; letter-spacing: 3px;
+  -webkit-appearance: none;
+}
+.auth-input:focus { border-color: #f5a623; }
+.auth-btn {
+  background: #f5a623; border: none; padding: 13px;
+  width: 100%; border-radius: 12px;
+  font-weight: 800; font-size: 16px; cursor: pointer;
+}
+.auth-error { color: #e74c3c; font-size: 12px; margin-top: 10px; min-height: 18px; }
+
+/* ── Адаптив ─────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .app-container { padding: 12px; }
+  .row-3 { flex-direction: column; }
+  .add-inputs { flex-direction: column; }
+}
+
+/* ── Скроллбар ───────────────────────────────────────────── */
+::-webkit-scrollbar { height: 4px; width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 2px; }
