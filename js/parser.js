@@ -13,14 +13,23 @@ const Parser = (() => {
     return '';
   }
 
+  // ── Помощники для текста ─────────────────────────────
+  function escapeRegExp(value) {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  function boundaryRegExp(value, flags = 'gi') {
+    const escaped = escapeRegExp(value);
+    return new RegExp(`(^|[^A-Za-z0-9_А-Яа-яЁё])${escaped}(?=$|[^A-Za-z0-9_А-Яа-яЁё])`, flags);
+  }
+
   // ── Нормализовать алиасы в тексте ─────────────────────
   // эп → 7368, хово → 796, 49-30 → 4930 и т.д.
   function normalizeAliases(text) {
     let s = text;
-    // 49-30 / 49,30 → 4930 (до общей замены дефисов!)
-    s = s.replace(/\b49[-,.]30\b/g, '4930');
+    s = s.replace(/\b49[-,.]30\b/gi, '4930');
     for (const [alias, num] of Object.entries(CFG.ALIASES)) {
-      s = s.replace(new RegExp('\\b' + alias + '\\b', 'gi'), num);
+      s = s.replace(boundaryRegExp(alias), '$1' + num);
     }
     return s;
   }
@@ -29,17 +38,32 @@ const Parser = (() => {
   function findMachines(text) {
     const found = [];
     for (const num of CFG.ALL) {
-      if (new RegExp('(?<![.,\\d])' + num + '(?![.,\\d])').test(text)) {
+      if (boundaryRegExp(num).test(text)) {
         found.push(num);
       }
     }
     return found;
   }
 
+  function stripVehicleWords(text) {
+    return text.replace(/\b(эва?куатор|самосвал|мини(?:к)?|экскаватор[- ]погрузчик|камаз|каламаз|вдк|чел|ч\.л)\b/gi, '');
+  }
+
+  function extractRouteFromHeader(header, driverMachine) {
+    let s = header;
+    s = s.replace(/^\s*\d{1,2}[.,:]\d{2}(?:[.,:]\d{2,4})?(?:[\s,;:]+)?/i, '');
+    if (driverMachine) {
+      s = s.replace(boundaryRegExp(driverMachine), '$1');
+    }
+    s = stripVehicleWords(s);
+    s = s.replace(/^[\s,;:\-\.]+|[\s,;:\-\.]+$/g, '').trim();
+    return s;
+  }
+
   // ── Распарсить дату ────────────────────────────────────
   // Форматы: 25.05 / 25,05 / 25. 05 / 25.05.26
   function parseDate(token) {
-    const m = token.replace(/\s/g,'').match(/^(\d{1,2})[.,](\d{2})(?:[.,]\d{2,4})?\.?$/);
+    const m = token.replace(/\s/g,'').match(/^(\d{1,2})[.,:](\d{2})(?:[.,:]\d{2,4})?\.?$/);
     return m ? m[1].padStart(2,'0') + '.' + m[2] : null;
   }
 
@@ -94,10 +118,10 @@ const Parser = (() => {
 
   // ── Заказчик ──────────────────────────────────────────
   function getClient(text) {
-    const tl = text.toLowerCase();
+    const tl = normalizeAliases(text).toLowerCase();
     if (/\bчл\b|ч\/л/i.test(tl)) return 'Частное лицо';
     for (const [key, label] of CFG.CLIENTS) {
-      if (tl.includes(key)) return label;
+      if (boundaryRegExp(key).test(tl)) return label;
     }
     return '';
   }
@@ -162,7 +186,7 @@ const Parser = (() => {
     s = s.replace(/\([^)]+\)/g, '');
     // убрать заказчиков
     for (const [key] of CFG.CLIENTS) {
-      s = s.replace(new RegExp('\\b' + key + '\\b', 'gi'), '');
+      s = s.replace(boundaryRegExp(key), '');
     }
     // убрать числа >= 1000 не в адресе
     s = s.replace(/(?<![.,\d])\d{4,6}(?![.,\d])/g, '');
@@ -254,12 +278,25 @@ const Parser = (() => {
         const tripLines = [];
         while (i < lines.length) {
           if (/^[А-ЯЁа-яёA-Za-z0-9][^:\n]{1,50}:\s*$/.test(lines[i].trim())) break;
-          tripLines.push(lines[i]);
+          const line = lines[i].trim();
+          if (line) tripLines.push(line);
           i++;
         }
 
-        // Разбиваем на отдельные рейсы
-        const trips = splitIntoTrips(tripLines);
+        // Если в заголовке нет номера машины, попробуем найти его в теле блока.
+        if (!driverMachine) {
+          for (const tripLine of tripLines) {
+            const machines = findMachines(normalizeAliases(tripLine));
+            if (machines.length) {
+              driverMachine = machines[0];
+              break;
+            }
+          }
+        }
+
+        const headerRoute = extractRouteFromHeader(header, driverMachine);
+        const candidates = headerRoute ? [headerRoute, ...tripLines] : tripLines;
+        const trips = splitIntoTrips(candidates);
 
         for (const tripRaw of trips) {
           const tline = normalizeAliases(tripRaw.trim());
