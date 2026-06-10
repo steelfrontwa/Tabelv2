@@ -81,3 +81,10 @@ const CFG = {
   SKIP: /путевые за|новый месяц|заправляться|задаем|бресо|^\s*$/i,
 
 };
+
+CFG.getMachineIdByLabel = label => {
+  return Object.keys(CFG.LABELS).find(id => CFG.LABELS[id] === label) || '';
+};
+
+CFG.getMachineLabelById = id => CFG.LABELS[id] || id || '';
+

@@ -290,6 +290,7 @@ const Parser = (() => {
             hours:     getHours(tline)    ?? '',
             trips:     getTrips(tline)    ?? '',
             pay:       '',
+            payManual: false,
           });
         }
       } else {

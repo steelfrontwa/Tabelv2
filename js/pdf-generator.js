@@ -56,7 +56,12 @@ const PDFGenerator = (() => {
           r.orderSum !== '' && r.orderSum ? fmt(r.orderSum) + ' ₽' : '—',
           r.hours !== '' ? String(r.hours) : '—',
           r.trips !== '' ? String(r.trips) : '—',
-          r.pay   !== '' ? fmt(r.pay) + ' ₽' : '—',
+          (() => {
+            const value = Calculator.resolveRowPay(r, settings);
+            return value !== null && value !== undefined
+              ? fmt(value) + ' ₽'
+              : (r.pay !== '' ? fmt(r.pay) + ' ₽' : '—');
+          })(),
         ]);
 
         doc.autoTable({

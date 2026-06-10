@@ -4,11 +4,42 @@
 
 const Calculator = (() => {
 
+  function getMachineId(machineLabel) {
+    return CFG.getMachineIdByLabel(machineLabel);
+  }
+
+  function getMachineRate(row, settings = {}) {
+    const machineId = getMachineId(row.machine);
+    if (!machineId) return 0;
+
+    const activeMachines = settings.activeMachines || [];
+    if (activeMachines.length && !activeMachines.includes(machineId)) return 0;
+
+    const rateMap = settings.rateMap || {};
+    const rate = parseFloat(rateMap[machineId]);
+    return Number.isFinite(rate) && rate > 0 ? rate : 0;
+  }
+
+  function resolveRowPay(row, settings = {}) {
+    const hasStoredManualPay =
+      row.pay !== '' && row.pay !== null && row.pay !== undefined && row.payManual !== false;
+
+    if (row.payManual === true || hasStoredManualPay) {
+      const manual = parseFloat(row.pay);
+      return Number.isFinite(manual) ? manual : 0;
+    }
+
+    const hours = parseFloat(row.hours) || 0;
+    const rate = getMachineRate(row, settings);
+    if (!hours || !rate) return null;
+    return hours * rate;
+  }
+
   // Считает итоги по массиву строк табеля
-  function calcTotals(rows) {
+  function calcTotals(rows, settings = {}) {
     const totalH = rows.reduce((a, r) => a + (parseFloat(r.hours) || 0), 0);
     const totalT = rows.reduce((a, r) => a + (parseInt(r.trips)   || 0), 0);
-    const totalP = rows.reduce((a, r) => a + (parseFloat(r.pay)   || 0), 0);
+    const totalP = rows.reduce((a, r) => a + (resolveRowPay(r, settings) || 0), 0);
     return { totalH, totalT, totalP };
   }
 
@@ -25,6 +56,6 @@ const Calculator = (() => {
     return { base, rest, hint };
   }
 
-  return { calcTotals, calcPayout };
+  return { calcTotals, calcPayout, resolveRowPay, getMachineRate };
 
 })();

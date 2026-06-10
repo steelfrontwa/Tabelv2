@@ -32,6 +32,47 @@
   </div>
 </div>
 
+<!-- ── ЭКРАН ПРОФИЛЯ ────────────────────────────────────── -->
+<div id="profile-modal" class="profile-modal" style="display:none">
+  <div class="profile-shell">
+    <div class="profile-hero">
+      <div class="profile-kicker">ПРОФИЛЬ ВОДИТЕЛЯ</div>
+      <div class="profile-title">Выбери технику и ставки</div>
+      <div class="profile-text">Сервис запомнит выбранные машины и сам посчитает оплату по месяцам.</div>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-section-title">Машины в работе</div>
+      <div id="machine-grid" class="machine-grid"></div>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-section-title">Ставки по технике</div>
+      <div id="rate-list" class="rate-list"></div>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-section-title">Общие настройки</div>
+      <div class="profile-fields">
+        <label class="profile-field">
+          <span>Водитель</span>
+          <input id="profile-name" type="text" placeholder="Иванов И.И.">
+        </label>
+        <label class="profile-field">
+          <span>Месяц</span>
+          <input id="profile-period" type="text" placeholder="Май 2026">
+        </label>
+        <label class="profile-field">
+          <span>Фикс. оклад</span>
+          <input id="profile-oklad" type="number" placeholder="0" inputmode="decimal">
+        </label>
+      </div>
+    </div>
+
+    <button id="profile-save" class="profile-btn">СОХРАНИТЬ И ПРОДОЛЖИТЬ</button>
+  </div>
+</div>
+
 <!-- ── ОСНОВНОЕ ПРИЛОЖЕНИЕ ──────────────────────────────── -->
 <div id="main-app" style="display:none">
 <div class="app-container">
@@ -39,12 +80,18 @@
   <div class="header">
     <div class="app-title">МОЙ ТАБЕЛЬ</div>
     <div class="app-sub">Вставь сообщения из чата → табель готов</div>
+    <div class="driver-pill">
+      <span id="driver-pill-name">Водитель</span>
+      <span id="driver-pill-meta"></span>
+    </div>
   </div>
+
+  <div id="app-status" class="app-status" aria-live="polite"></div>
 
   <!-- Вкладки -->
   <div class="tabs">
     <div class="tab active" data-tab="insert">Вставить</div>
-    <div class="tab" data-tab="tabel">Табель</div>
+      <div class="tab" data-tab="tabel">Табель <span id="row-badge"></span></div>
     <div class="tab" data-tab="itogi">Итоги</div>
   </div>
 

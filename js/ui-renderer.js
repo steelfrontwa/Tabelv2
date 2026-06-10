@@ -21,6 +21,9 @@ const UI = (() => {
 
   // ── Рендер одной строки ───────────────────────────────
   function rowHTML(r) {
+    const profile = App.getProfile ? App.getProfile() : {};
+    const payValue = Calculator.resolveRowPay(r, profile);
+    const payDisplay = payValue !== null && payValue !== undefined ? fmt(payValue) : (r.pay !== '' ? fmt(r.pay) : '—');
     return `<tr data-id="${r.id}">
       <td class="c-date">${r.date}</td>
       <td class="c-machine">${machineBadge(r.machine)}</td>
@@ -33,7 +36,7 @@ const UI = (() => {
         onchange="App.updRow(${r.id},'hours',this.value)" inputmode="decimal"></td>
       <td class="c-num"><input type="number" value="${r.trips}" placeholder="—"
         onchange="App.updRow(${r.id},'trips',this.value)" inputmode="decimal"></td>
-      <td class="c-pay"><input type="number" value="${r.pay}" placeholder="—"
+      <td class="c-pay"><input type="number" value="${payDisplay}" placeholder="—"
         oninput="App.updRow(${r.id},'pay',this.value)" inputmode="decimal"></td>
       <td class="c-del"><button onclick="App.delRow(${r.id})">✕</button></td>
     </tr>`;
@@ -53,7 +56,8 @@ const UI = (() => {
 
   // ── Обновить итоги ────────────────────────────────────
   function renderTotals(rows, settings) {
-    const { totalH, totalT, totalP } = Calculator.calcTotals(rows);
+    const profile = App.getProfile ? App.getProfile() : {};
+    const { totalH, totalT, totalP } = Calculator.calcTotals(rows, profile);
     const { base, rest, hint }       = Calculator.calcPayout({
       totalP,
       oklad:    settings.oklad,

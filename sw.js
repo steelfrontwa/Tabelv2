@@ -11,8 +11,8 @@ const ASSETS = [
   './js/pdf-generator.js',
   './js/ui-renderer.js',
   './js/app.js',
-  './assets/icons/icon-192.png',
-  './assets/icons/icon-512.png',
+  './assets/icons/icon-192.svg',
+  './assets/icons/icon-512.svg',
   'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js',
 ];

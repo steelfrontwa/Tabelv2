@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Табель">
+  <rect width="512" height="512" rx="104" fill="#f5a623"/>
+  <rect x="104" y="128" width="304" height="256" rx="40" fill="#111111"/>
+  <rect x="144" y="168" width="224" height="26" rx="13" fill="#f5a623"/>
+  <rect x="144" y="220" width="192" height="26" rx="13" fill="#f0f0f0"/>
+  <rect x="144" y="272" width="160" height="26" rx="13" fill="#f0f0f0"/>
+  <rect x="144" y="324" width="128" height="26" rx="13" fill="#f0f0f0"/>
+</svg>
