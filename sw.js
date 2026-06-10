@@ -1,4 +1,4 @@
-const CACHE = 'tabel-v2';
+const CACHE = 'tabel-v3';
 const ASSETS = [
   './',
   './index.html',
